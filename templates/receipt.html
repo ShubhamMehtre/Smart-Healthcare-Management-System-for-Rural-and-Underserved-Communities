@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Fee Receipt | Smart Healthcare</title>
+
+    <!-- Flask CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        body{
+            background:#eef6fb;
+            font-family:'Poppins',sans-serif;
+        }
+
+        /* Header */
+        .receipt-banner{
+            background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+            color:white;
+            text-align:center;
+            padding:35px;
+        }
+
+        .receipt-banner h1{
+            font-size:32px;
+            margin-bottom:8px;
+        }
+
+        .receipt-banner p{
+            font-size:16px;
+        }
+
+        /* Container */
+        .container{
+            width:95%;
+            max-width:1100px;
+            margin:30px auto;
+        }
+
+        /* Form Card */
+        .form-card{
+            background:white;
+            padding:30px;
+            border-radius:18px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom:30px;
+        }
+
+        .form-card h2{
+            text-align:center;
+            color:#0f6ba8;
+            margin-bottom:20px;
+        }
+
+        .row{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:20px;
+        }
+
+        label{
+            display:block;
+            margin-top:15px;
+            margin-bottom:8px;
+            font-weight:600;
+            color:#0f6ba8;
+        }
+
+        input,select{
+            width:100%;
+            padding:12px;
+            border-radius:10px;
+            border:1px solid #ccc;
+            outline:none;
+        }
+
+        input:focus,select:focus{
+            border-color:#0f6ba8;
+        }
+
+        .generate-btn{
+            background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+            color:white;
+            padding:14px;
+            border:none;
+            width:100%;
+            border-radius:10px;
+            font-size:16px;
+            margin-top:25px;
+            cursor:pointer;
+        }
+
+        .generate-btn:hover{
+            transform:translateY(-2px);
+        }
+
+        /* Receipt */
+        .receipt{
+            background:white;
+            padding:35px;
+            border-radius:18px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .receipt-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            border-bottom:2px solid #0f6ba8;
+            padding-bottom:15px;
+            margin-bottom:20px;
+        }
+
+        .receipt-header h2{
+            color:#0f6ba8;
+        }
+
+        .hospital-info p{
+            margin:4px 0;
+            color:#555;
+        }
+
+        .receipt-info{
+            text-align:right;
+        }
+
+        .receipt-info p{
+            margin:5px 0;
+        }
+
+        .patient-details{
+            margin:20px 0;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:15px;
+        }
+
+        .detail-box{
+            background:#f4f9fc;
+            padding:15px;
+            border-radius:10px;
+        }
+
+        .detail-box strong{
+            color:#0f6ba8;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        th{
+            background:#0f6ba8;
+            color:white;
+            padding:12px;
+        }
+
+        td{
+            padding:12px;
+            border:1px solid #ddd;
+        }
+
+        tr:nth-child(even){
+            background:#f8fbff;
+        }
+
+        .total-box{
+            text-align:right;
+            margin-top:20px;
+        }
+
+        .total-box h2{
+            color:#0f6ba8;
+        }
+
+        .status-paid{
+            color:green;
+            font-weight:bold;
+        }
+
+        .thank-you{
+            text-align:center;
+            margin-top:30px;
+            padding-top:20px;
+            border-top:1px dashed #ccc;
+        }
+
+        .print-btn{
+            margin-top:20px;
+            width:100%;
+            padding:14px;
+            background:#28a745;
+            color:white;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+        }
+
+        .print-btn:hover{
+            background:#218838;
+        }
+
+        @media print{
+            nav,.form-card,.print-btn,.receipt-banner{
+                display:none;
+            }
+
+            body{
+                background:white;
+            }
+
+            .receipt{
+                box-shadow:none;
+                border:2px solid #0f6ba8;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="receipt-banner">
+        <h1><i class="fas fa-file-invoice-dollar"></i> Smart Healthcare Management System</h1>
+        <p>Patient Consultation Fee Receipt</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/">🏠 Home</a>
+        <a href="/patient">👤 Patients</a>
+        <a href="/doctor">🩺 Doctors</a>
+        <a href="/appointment">📅 Appointments</a>
+        <a href="/records">📋 Medical Records</a>
+        <a href="/dashboard">📊 Dashboard</a>
+        <a href="/receipt">🧾 Receipt</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- Receipt Form -->
+        <div class="form-card">
+
+            <h2>Generate Patient Receipt</h2>
+
+            <div class="row">
+                <div>
+                    <label>Patient Name</label>
+                    <input type="text" id="patientName" placeholder="Enter patient name">
+                </div>
+
+                <div>
+                    <label>Age</label>
+                    <input type="number" id="age" placeholder="Enter age">
+                </div>
+            </div>
+
+            <div class="row">
+                <div>
+                    <label>Doctor Name</label>
+                    <input type="text" id="doctor" placeholder="Enter doctor name">
+                </div>
+
+                <div>
+                    <label>Payment Method</label>
+                    <select id="payment">
+                        <option>Cash</option>
+                        <option>UPI</option>
+                        <option>Card</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Consultation Fee (₹)</label>
+            <input type="number" id="consultation" value="300">
+
+            <label>Medicine Fee (₹)</label>
+            <input type="number" id="medicine" value="0">
+
+            <label>Lab/Test Fee (₹)</label>
+            <input type="number" id="test" value="0">
+
+            <button class="generate-btn" onclick="generateReceipt()">
+                <i class="fas fa-file-invoice"></i> Generate Receipt
+            </button>
+
+        </div>
+
+        <!-- Receipt -->
+        <div class="receipt">
+
+            <div class="receipt-header">
+
+                <div class="hospital-info">
+                    <h2>Smart Healthcare Hospital</h2>
+                    <p>Primary Health Centre, Rural Healthcare Services</p>
+                    <p>📞 Emergency: 108</p>
+                    <p>📍 Karnataka, India</p>
+                </div>
+
+                <div class="receipt-info">
+                    <p><strong>Receipt No:</strong> <span id="receiptNo">SH-1001</span></p>
+                    <p><strong>Date:</strong> <span id="receiptDate"></span></p>
+                </div>
+
+            </div>
+
+            <div class="patient-details">
+
+                <div class="detail-box">
+                    <strong>Patient Name</strong><br>
+                    <span id="rPatient">-</span>
+                </div>
+
+                <div class="detail-box">
+                    <strong>Age</strong><br>
+                    <span id="rAge">-</span>
+                </div>
+
+                <div class="detail-box">
+                    <strong>Doctor</strong><br>
+                    <span id="rDoctor">-</span>
+                </div>
+
+                <div class="detail-box">
+                    <strong>Payment Method</strong><br>
+                    <span id="rPayment">-</span>
+                </div>
+
+            </div>
+
+            <table>
+
+                <tr>
+                    <th>Service</th>
+                    <th>Amount (₹)</th>
+                </tr>
+
+                <tr>
+                    <td>Doctor Consultation Fee</td>
+                    <td id="rConsultation">₹0</td>
+                </tr>
+
+                <tr>
+                    <td>Medicine Charges</td>
+                    <td id="rMedicine">₹0</td>
+                </tr>
+
+                <tr>
+                    <td>Laboratory/Test Charges</td>
+                    <td id="rTest">₹0</td>
+                </tr>
+
+            </table>
+
+            <div class="total-box">
+                <h2>Total Amount : ₹<span id="rTotal">0</span></h2>
+                <p class="status-paid">✔ Payment Successful</p>
+            </div>
+
+            <div class="thank-you">
+                <h3>Thank You!</h3>
+                <p>Your payment has been received successfully.</p>
+                <p>Please keep this receipt for future medical visits.</p>
+            </div>
+
+            <button class="print-btn" onclick="window.print()">
+                <i class="fas fa-print"></i> Print Receipt
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Flask JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        function generateReceipt(){
+
+            let consultation = Number(document.getElementById("consultation").value);
+            let medicine = Number(document.getElementById("medicine").value);
+            let test = Number(document.getElementById("test").value);
+
+            let total = consultation + medicine + test;
+
+            document.getElementById("rPatient").innerHTML =
+                document.getElementById("patientName").value;
+
+            document.getElementById("rAge").innerHTML =
+                document.getElementById("age").value;
+
+            document.getElementById("rDoctor").innerHTML =
+                document.getElementById("doctor").value;
+
+            document.getElementById("rPayment").innerHTML =
+                document.getElementById("payment").value;
+
+            document.getElementById("rConsultation").innerHTML = "₹" + consultation;
+            document.getElementById("rMedicine").innerHTML = "₹" + medicine;
+            document.getElementById("rTest").innerHTML = "₹" + test;
+            document.getElementById("rTotal").innerHTML = total;
+
+            let today = new Date();
+            document.getElementById("receiptDate").innerHTML =
+                today.toLocaleDateString("en-IN");
+
+            document.getElementById("receiptNo").innerHTML =
+                "SH-" + today.getFullYear() + "-" + Math.floor(1000 + Math.random()*9000);
+        }
+
+        window.onload = function(){
+            document.getElementById("receiptDate").innerHTML =
+                new Date().toLocaleDateString("en-IN");
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Prediction - Smart Healthcare</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body{
+            font-family:Poppins,sans-serif;
+            background:#f4f9fc;
+            margin:0;
+        }
+
+        header{
+            background:#0f6ba8;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+        .navbar{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            padding:15px;
+            background:white;
+        }
+
+        .navbar a{
+            text-decoration:none;
+            color:#0f6ba8;
+            font-weight:bold;
+        }
+
+        .container{
+            max-width:900px;
+            margin:40px auto;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 5px 20px rgba(0,0,0,.1);
+        }
+
+        label{
+            display:block;
+            margin-top:15px;
+            font-weight:600;
+        }
+
+        input,textarea{
+            width:100%;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:10px;
+            margin-top:5px;
+        }
+
+        button{
+            margin-top:20px;
+            width:100%;
+            padding:14px;
+            border:none;
+            background:#0f6ba8;
+            color:white;
+            font-size:16px;
+            border-radius:10px;
+            cursor:pointer;
+        }
+
+        .result{
+            margin-top:30px;
+            background:#eef8ff;
+            padding:20px;
+            border-radius:12px;
+            border-left:5px solid #0f6ba8;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:40px;
+        }
+
+        table th{
+            background:#0f6ba8;
+            color:white;
+            padding:12px;
+        }
+
+        table td{
+            border:1px solid #ddd;
+            padding:12px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>AI Health Prediction</h1>
+    <p>Smart Healthcare Management System</p>
+</header>
+
+<nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/patient">Patients</a>
+    <a href="/doctor">Doctors</a>
+    <a href="/appointment">Appointments</a>
+    <a href="/records">Records</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/receipt">Receipt</a>
+    <a href="/prediction">🩺 Health Prediction</a>
+</nav>
+
+<div class="container">
+
+    <h2>Predict Patient Health Risk</h2>
+
+    <form method="POST" action="/prediction">
+
+        <label>Patient Name</label>
+        <input type="text" name="patient_name" required>
+
+        <label>Age</label>
+        <input type="number" name="age" required>
+
+        <label>Temperature (°C)</label>
+        <input type="number" step="0.1" name="temperature" required>
+
+        <label>Blood Pressure</label>
+        <input type="text" name="blood_pressure" placeholder="120/80">
+
+        <label>Symptoms</label>
+        <textarea name="symptoms" rows="3"></textarea>
+
+        <button type="submit">Predict Health Risk</button>
+
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        <h2>Prediction Result</h2>
+
+        <p><strong>Risk Level:</strong> {{ prediction.risk }}</p>
+
+        <p><strong>Suggested Doctor:</strong> {{ prediction.doctor }}</p>
+
+        <p><strong>Advice:</strong> {{ prediction.advice }}</p>
+    </div>
+    {% endif %}
+
+    <h2>Prediction History</h2>
+
+    <table>
+        <tr>
+            <th>Patient</th>
+            <th>Risk</th>
+            <th>Doctor</th>
+            <th>Date</th>
+        </tr>
+
+        {% for item in predictions %}
+        <tr>
+            <td>{{ item.patient_name }}</td>
+            <td>{{ item.risk_level }}</td>
+            <td>{{ item.suggested_doctor }}</td>
+            <td>{{ item.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

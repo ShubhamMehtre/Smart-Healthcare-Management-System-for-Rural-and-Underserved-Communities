@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration | Smart Healthcare</title>
+
+    <!-- Flask CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#e8f5ff,#f4fcff);
+            color:#2d3748;
+        }
+
+        /* Header */
+        header{
+            background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+            color:white;
+            text-align:center;
+            padding:25px;
+        }
+
+        header h1{
+            font-size:2.2rem;
+        }
+
+        header p{
+            margin-top:8px;
+            font-size:16px;
+        }
+
+        /* Navigation */
+        nav{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+            background:white;
+            padding:15px;
+            box-shadow:0 2px 8px rgba(0,0,0,.08);
+        }
+
+        nav a{
+            text-decoration:none;
+            color:#0f6ba8;
+            font-weight:600;
+            padding:10px 18px;
+            border-radius:30px;
+            transition:.3s;
+        }
+
+        nav a:hover{
+            background:#0f6ba8;
+            color:white;
+        }
+
+        /* Main Layout */
+        .container{
+            max-width:1200px;
+            margin:40px auto;
+            padding:0 20px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:35px;
+        }
+
+        /* Left Information */
+        .info-section h2{
+            color:#0f6ba8;
+            margin-bottom:15px;
+            font-size:32px;
+        }
+
+        .info-section p{
+            margin-bottom:25px;
+        }
+
+        .info-card{
+            display:flex;
+            gap:15px;
+            background:white;
+            padding:20px;
+            border-radius:15px;
+            margin-bottom:18px;
+            box-shadow:0 8px 18px rgba(0,0,0,.08);
+        }
+
+        .info-card i{
+            color:#0f6ba8;
+            font-size:28px;
+        }
+
+        .info-card h3{
+            color:#0f6ba8;
+        }
+
+        /* Registration Form */
+        .form-container{
+            background:white;
+            padding:30px;
+            border-radius:18px;
+            box-shadow:0 10px 25px rgba(0,0,0,.1);
+        }
+
+        .form-container h2{
+            text-align:center;
+            color:#0f6ba8;
+            margin-bottom:20px;
+        }
+
+        label{
+            display:block;
+            margin-top:15px;
+            margin-bottom:6px;
+            font-weight:600;
+        }
+
+        input,select{
+            width:100%;
+            padding:13px;
+            border:1px solid #d1d9e6;
+            border-radius:10px;
+            outline:none;
+        }
+
+        input:focus,
+        select:focus{
+            border-color:#0f6ba8;
+            box-shadow:0 0 0 3px rgba(15,107,168,.15);
+        }
+
+        .register-btn{
+            width:100%;
+            margin-top:22px;
+            padding:14px;
+            border:none;
+            border-radius:10px;
+            background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+            color:white;
+            font-size:16px;
+            font-weight:600;
+            cursor:pointer;
+        }
+
+        .register-btn:hover{
+            transform:translateY(-2px);
+        }
+
+        /* Patient Table */
+        .table-section{
+            max-width:1200px;
+            margin:20px auto 60px;
+            padding:0 20px;
+        }
+
+        .table-section h2{
+            color:#0f6ba8;
+            margin-bottom:18px;
+        }
+
+        .table-container{
+            background:white;
+            border-radius:15px;
+            overflow:hidden;
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#0f6ba8;
+            color:white;
+            padding:15px;
+        }
+
+        td{
+            padding:13px;
+            border-bottom:1px solid #eee;
+        }
+
+        tr:nth-child(even){
+            background:#f8fbff;
+        }
+
+        tr:hover{
+            background:#eef7ff;
+        }
+
+        /* Footer */
+        footer{
+            background:#0f172a;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+        @media(max-width:900px){
+            .container{
+                grid-template-columns:1fr;
+            }
+
+            .table-container{
+                overflow-x:auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Header -->
+<header>
+    <h1><i class="fas fa-hospital"></i> Smart Healthcare Management System</h1>
+    <p>Patient Registration Portal</p>
+</header>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <a href="/">🏠 Home</a>
+    <a href="/patient">👤 Patients</a>
+    <a href="/doctor">🩺 Doctors</a>
+    <a href="/appointment">📅 Appointments</a>
+    <a href="/records">📋 Medical Records</a>
+    <a href="/dashboard">📊 Dashboard</a>
+    <a href="/receipt">🧾 Receipt</a>
+</nav>
+
+<!-- Main Section -->
+<div class="container">
+
+    <!-- Left Side -->
+    <div class="info-section">
+
+        <h2>Patient Registration</h2>
+
+        <p>
+            Register patients quickly and securely. Maintain accurate healthcare
+            information for better diagnosis, appointments and follow-up care.
+        </p>
+
+        <div class="info-card">
+            <i class="fas fa-user-plus"></i>
+            <div>
+                <h3>Easy Registration</h3>
+                <p>Register patients with complete demographic details.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-heartbeat"></i>
+            <div>
+                <h3>Digital Health Records</h3>
+                <p>Store patient details safely for future medical visits.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+                <h3>Rural Healthcare</h3>
+                <p>Designed for Primary Health Centres and rural communities.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Right Side Form -->
+    <div class="form-container">
+
+        <h2><i class="fas fa-user-plus"></i> Register New Patient</h2>
+
+        <!-- Flask Form -->
+        <form method="POST" action="/patient">
+
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="Enter full name" required>
+
+            <label>Age</label>
+            <input type="number" name="age" placeholder="Enter age" required>
+
+            <label>Gender</label>
+            <select name="gender" required>
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+
+            <label>Phone Number</label>
+            <input type="text" name="phone" placeholder="Enter phone number" required>
+
+<!-- NEW EMAIL FIELD -->
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="Enter email address" required>
+
+            <label>Village Name</label>
+            <input type="text" name="village" placeholder="Enter village name" required>
+
+            <button type="submit" class="register-btn">
+                <i class="fas fa-check-circle"></i> Register Patient
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- Registered Patients Table -->
+<section class="table-section">
+
+    <h2><i class="fas fa-users"></i> Registered Patients</h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Village</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% if patients %}
+
+                    {% for patient in patients %}
+
+                    <tr>
+                        <td>{{ patient.id }}</td>
+                        <td>{{ patient.name }}</td>
+                        <td>{{ patient.age }}</td>
+                        <td>{{ patient.gender }}</td>
+                        <td>{{ patient.phone }}</td>
+                        <td>{{ patient.email}}</td>
+                        <td>{{ patient.village }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+                        <td colspan="7" style="text-align:center;color:#666;padding:20px;">
+                            No patients registered yet.
+                        </td>
+                    </tr>
+
+                {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2026 Smart Healthcare Management System</p>
+    <p>Accessible Healthcare for Rural & Underserved Communities</p>
+</footer>
+
+</body>
+</html>

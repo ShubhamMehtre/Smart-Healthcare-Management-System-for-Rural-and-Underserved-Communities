@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration - Smart Healthcare</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#eef7ff,#f8fcff);
+            color:#2d3748;
+        }
+
+        /* Header */
+        header{
+            background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+            color:white;
+            text-align:center;
+            padding:25px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        header h1{
+            font-size:2.2rem;
+        }
+
+        header p{
+            margin-top:8px;
+        }
+
+        /* Navigation */
+        nav{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+            background:white;
+            padding:15px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+
+        nav a{
+            text-decoration:none;
+            color:#0f6ba8;
+            font-weight:600;
+            padding:10px 18px;
+            border-radius:30px;
+            transition:.3s;
+        }
+
+        nav a:hover{
+            background:#0f6ba8;
+            color:white;
+        }
+
+        /* Container */
+        .container{
+            max-width:1200px;
+            margin:50px auto;
+            padding:0 20px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:40px;
+        }
+
+        /* Left Section */
+        .info-section h2{
+            color:#0f6ba8;
+            font-size:2rem;
+            margin-bottom:15px;
+        }
+
+        .info-section p{
+            color:#555;
+            margin-bottom:25px;
+        }
+
+        .info-card{
+            display:flex;
+            align-items:flex-start;
+            gap:15px;
+            background:white;
+            padding:20px;
+            border-radius:16px;
+            margin-bottom:18px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .info-card i{
+            font-size:30px;
+            color:#0f6ba8;
+        }
+
+        .info-card h3{
+            color:#0f6ba8;
+            margin-bottom:5px;
+        }
+
+        /* Form */
+        .form-container{
+            background:white;
+            padding:35px;
+            border-radius:20px;
+            box-shadow:0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .form-container h2{
+            text-align:center;
+            color:#0f6ba8;
+            margin-bottom:25px;
+        }
+
+        label{
+            display:block;
+            margin-top:15px;
+            margin-bottom:8px;
+            font-weight:600;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:14px;
+            border:1px solid #d1d9e6;
+            border-radius:12px;
+            outline:none;
+            background:#fafcff;
+            transition:.3s;
+        }
+
+        input:focus,
+        select:focus{
+            border-color:#0f6ba8;
+            box-shadow:0 0 0 3px rgba(15,107,168,.15);
+        }
+
+        .register-btn{
+            width:100%;
+            padding:15px;
+            margin-top:25px;
+            border:none;
+            border-radius:12px;
+            background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+            color:white;
+            font-size:16px;
+            font-weight:600;
+            cursor:pointer;
+            transition:.3s;
+        }
+
+        .register-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 8px 18px rgba(15,107,168,.25);
+        }
+
+        /* Success Message */
+        .success-msg{
+            background:#d1fae5;
+            color:#065f46;
+            padding:12px;
+            border-radius:10px;
+            margin-bottom:15px;
+            text-align:center;
+            font-weight:600;
+        }
+
+        /* Table */
+        .table-section{
+            max-width:1200px;
+            margin:30px auto 60px;
+            padding:0 20px;
+        }
+
+        .table-section h2{
+            color:#0f6ba8;
+            margin-bottom:20px;
+        }
+
+        .table-container{
+            background:white;
+            border-radius:18px;
+            overflow:hidden;
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#0f6ba8;
+            color:white;
+            padding:15px;
+        }
+
+        td{
+            padding:14px;
+            border-bottom:1px solid #e5e7eb;
+        }
+
+        tr:nth-child(even){
+            background:#f8fbff;
+        }
+
+        tr:hover{
+            background:#eef7ff;
+        }
+
+        .badge{
+            background:#dbeafe;
+            color:#1d4ed8;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:13px;
+            font-weight:600;
+        }
+
+        /* Footer */
+        footer{
+            background:#0f172a;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+        @media(max-width:900px){
+            .container{
+                grid-template-columns:1fr;
+            }
+
+            nav{
+                justify-content:center;
+            }
+
+            .table-container{
+                overflow-x:auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1><i class="fas fa-user-doctor"></i> Smart Healthcare Management System</h1>
+    <p>Doctor Registration Portal</p>
+</header>
+
+<nav>
+    <a href="/"><i class="fas fa-house"></i> Home</a>
+    <a href="/patient"><i class="fas fa-user"></i> Patients</a>
+    <a href="/doctor"><i class="fas fa-user-doctor"></i> Doctors</a>
+    <a href="/appointment"><i class="fas fa-calendar-check"></i> Appointments</a>
+    <a href="/records"><i class="fas fa-notes-medical"></i> Medical Records</a>
+    <a href="/dashboard"><i class="fas fa-chart-column"></i> Dashboard</a>
+    <a href="/receipt"><i class="fas fa-file-invoice"></i> Receipt</a>
+</nav>
+
+<div class="container">
+
+    <!-- Left Information -->
+    <div class="info-section">
+
+        <h2>Doctor Registration</h2>
+
+        <p>
+            Register qualified doctors, manage their specialization, and
+            connect healthcare professionals with rural communities.
+        </p>
+
+        <div class="info-card">
+            <i class="fas fa-user-doctor"></i>
+            <div>
+                <h3>Qualified Doctors</h3>
+                <p>Maintain a verified list of healthcare professionals.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-stethoscope"></i>
+            <div>
+                <h3>Specialized Care</h3>
+                <p>Doctors are categorized based on specialization.</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-hospital"></i>
+            <div>
+                <h3>Community Healthcare</h3>
+                <p>Improve medical access for villages and underserved communities.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Registration Form -->
+    <div class="form-container">
+
+        <h2><i class="fas fa-user-plus"></i> Register Doctor</h2>
+
+        {% if message %}
+        <div class="success-msg">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/doctor">
+
+            <label>Doctor Name</label>
+            <input type="text" name="name" placeholder="Enter doctor name" required>
+
+            <label>Specialization</label>
+            <select name="specialization" required>
+                <option value="">Select Specialization</option>
+                <option>General Physician</option>
+                <option>Pediatrician</option>
+                <option>Gynecologist</option>
+                <option>Cardiologist</option>
+                <option>Dermatologist</option>
+                <option>Orthopedic</option>
+                <option>Neurologist</option>
+            </select>
+
+            <label>Email Address</label>
+            <input type="email" name="email" required>
+
+            <label>Experience (Years)</label>
+            <input type="number" name="experience" required>
+
+            <label>Available Time</label>
+            <input type="text" name="available_time"
+            placeholder="9 AM - 2 PM" required>
+            <input type="text" name="phone"
+                   placeholder="Enter 10-digit phone number"
+                   maxlength="10" required>
+
+            <button type="submit" class="register-btn">
+                <i class="fas fa-check-circle"></i> Register Doctor
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- Doctors Table -->
+<section class="table-section">
+
+    <h2><i class="fas fa-list"></i> Registered Doctors</h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Doctor Name</th>
+                    <th>Specialization</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for doctor in doctors %}
+                <tr>
+                    <td>{{ doctor.id }}</td>
+                    <td>
+                        <i class="fas fa-user-doctor" style="color:#0f6ba8;"></i>
+                        {{ doctor.name }}
+                    </td>
+                    <td>
+                        <span class="badge">{{ doctor.specialization }}</span>
+                    </td>
+                    <td>{{ doctor.phone }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<footer>
+    <p>&copy; 2026 Smart Healthcare Management System</p>
+    <p>Accessible Healthcare for Rural & Underserved Communities</p>
+</footer>
+
+</body>
+</html>

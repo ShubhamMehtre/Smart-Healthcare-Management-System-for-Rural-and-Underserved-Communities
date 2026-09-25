@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Healthcare</title>
+
+```
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Poppins',sans-serif;
+    }
+
+    body{
+        background:#f4f9fc;
+        color:#2d3748;
+    }
+
+    /* Header */
+    header{
+        background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+        color:white;
+        text-align:center;
+        padding:25px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    header h1{
+        font-size:2.3rem;
+    }
+
+    /* Navigation */
+    nav{
+        display:flex;
+        justify-content:center;
+        gap:15px;
+        flex-wrap:wrap;
+        background:white;
+        padding:15px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    nav a{
+        text-decoration:none;
+        color:#0f6ba8;
+        font-weight:600;
+        padding:10px 18px;
+        border-radius:30px;
+        transition:0.3s;
+    }
+
+    nav a:hover{
+        background:#0f6ba8;
+        color:white;
+    }
+
+    /* Dashboard Container */
+    .dashboard-container{
+        max-width:1200px;
+        margin:40px auto;
+        padding:0 20px;
+    }
+
+    .dashboard-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        margin-bottom:30px;
+    }
+
+    .dashboard-header h2{
+        color:#0f6ba8;
+        font-size:2rem;
+    }
+
+    .dashboard-header p{
+        color:#64748b;
+    }
+
+    /* Cards */
+    .dashboard-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:20px;
+        margin-bottom:35px;
+    }
+
+    .card{
+        color:white;
+        padding:25px;
+        border-radius:18px;
+        box-shadow:0 10px 25px rgba(0,0,0,0.12);
+        transition:0.3s;
+        position:relative;
+        overflow:hidden;
+    }
+
+    .card:hover{
+        transform:translateY(-5px);
+    }
+
+    .card i{
+        font-size:2rem;
+        opacity:0.9;
+        margin-bottom:15px;
+    }
+
+    .card h3{
+        font-size:1rem;
+        margin-bottom:10px;
+    }
+
+    .card p{
+        font-size:2.2rem;
+        font-weight:700;
+    }
+
+    .blue{background:linear-gradient(135deg,#1976d2,#42a5f5);}
+    .green{background:linear-gradient(135deg,#2e7d32,#66bb6a);}
+    .orange{background:linear-gradient(135deg,#ef6c00,#ffa726);}
+    .purple{background:linear-gradient(135deg,#7b1fa2,#ab47bc);}
+
+    /* Dashboard Sections */
+    .dashboard-section{
+        background:white;
+        padding:25px;
+        border-radius:18px;
+        margin-bottom:25px;
+        box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .dashboard-section h3{
+        color:#0f6ba8;
+        margin-bottom:18px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+    }
+
+    /* Emergency */
+    .emergency-box{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:20px;
+    }
+
+    .emergency-item{
+        background:#f8fbff;
+        padding:18px;
+        border-radius:12px;
+        border-left:5px solid #0f6ba8;
+    }
+
+    .emergency-item h4{
+        color:#0f6ba8;
+        margin-bottom:8px;
+    }
+
+    /* Health Awareness */
+    .health-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        gap:20px;
+    }
+
+    .health-card{
+        background:#f8fbff;
+        padding:20px;
+        border-radius:14px;
+        text-align:center;
+        transition:0.3s;
+    }
+
+    .health-card:hover{
+        transform:translateY(-4px);
+    }
+
+    .health-card i{
+        font-size:2rem;
+        color:#0f6ba8;
+        margin-bottom:12px;
+    }
+
+    .health-card h4{
+        color:#0f6ba8;
+        margin-bottom:10px;
+    }
+
+    /* Quick Links */
+    .quick-links{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+        gap:15px;
+    }
+
+    .quick-btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        padding:15px;
+        background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+        color:white;
+        text-decoration:none;
+        border-radius:12px;
+        font-weight:600;
+        transition:0.3s;
+    }
+
+    .quick-btn:hover{
+        transform:translateY(-2px);
+        box-shadow:0 8px 18px rgba(15,107,168,0.3);
+    }
+
+    /* Chart Placeholder */
+    .chart-placeholder{
+        height:250px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:linear-gradient(135deg,#eef7ff,#f8fcff);
+        border:2px dashed #cbd5e1;
+        border-radius:14px;
+        color:#64748b;
+        font-weight:500;
+    }
+
+    /* Footer */
+    footer{
+        background:#0f172a;
+        color:white;
+        text-align:center;
+        padding:25px;
+        margin-top:40px;
+    }
+
+    /* Responsive */
+    @media(max-width:768px){
+        .dashboard-header{
+            text-align:center;
+            justify-content:center;
+            gap:10px;
+        }
+
+        nav{
+            justify-content:center;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+
+<header>
+    <h1><i class="fas fa-hospital"></i> Smart Healthcare Management System</h1>
+    <p>Professional Admin Dashboard</p>
+</header>
+
+<nav class="navbar">
+    <a href="/">🏠 Home</a>
+    <a href="/patient">👤 Patients</a>
+    <a href="/doctor">🩺 Doctors</a>
+    <a href="/appointment">📅 Appointments</a>
+    <a href="/records">📋 Medical Records</a>
+    <a href="/dashboard">📊 Dashboard</a>
+    <a href="/receipt">🧾 Receipt</a>
+</nav>
+
+<div class="dashboard-container">
+
+```
+<div class="dashboard-header">
+    <div>
+        <h2>Healthcare Overview</h2>
+        <p>Real-time monitoring of rural healthcare services</p>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card blue">
+        <i class="fas fa-users"></i>
+        <h3>Total Patients</h3>
+        <p id="totalPatients">0</p>
+    </div>
+
+    <div class="card green">
+        <i class="fas fa-user-md"></i>
+        <h3>Total Doctors</h3>
+        <p id="totalDoctors">0</p>
+    </div>
+
+    <div class="card orange">
+        <i class="fas fa-calendar-check"></i>
+        <h3>Appointments</h3>
+        <p id="totalAppointments">0</p>
+    </div>
+
+    <div class="card purple">
+        <i class="fas fa-file-medical"></i>
+        <h3>Medical Records</h3>
+        <p id="totalRecords">0</p>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h3><i class="fas fa-chart-area"></i> Healthcare Activity</h3>
+    <div class="chart-placeholder">
+        Healthcare Statistics & Patient Activity Chart
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h3><i class="fas fa-ambulance"></i> Emergency Healthcare Support</h3>
+
+    <div class="emergency-box">
+        <div class="emergency-item">
+            <h4>Ambulance</h4>
+            <p>Dial <strong>108</strong></p>
+        </div>
+
+        <div class="emergency-item">
+            <h4>Primary Health Center</h4>
+            <p>+91 9876543210</p>
+        </div>
+
+        <div class="emergency-item">
+            <h4>District Hospital</h4>
+            <p>+91 9123456789</p>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h3><i class="fas fa-heartbeat"></i> Health Awareness</h3>
+
+    <div class="health-grid">
+
+        <div class="health-card">
+            <i class="fas fa-tint"></i>
+            <h4>Safe Drinking Water</h4>
+            <p>Always use clean and safe drinking water.</p>
+        </div>
+
+        <div class="health-card">
+            <i class="fas fa-hands-wash"></i>
+            <h4>Hand Hygiene</h4>
+            <p>Wash hands regularly to prevent infections.</p>
+        </div>
+
+        <div class="health-card">
+            <i class="fas fa-syringe"></i>
+            <h4>Vaccination</h4>
+            <p>Complete child vaccination schedules on time.</p>
+        </div>
+
+        <div class="health-card">
+            <i class="fas fa-running"></i>
+            <h4>Healthy Lifestyle</h4>
+            <p>Exercise regularly and maintain a balanced diet.</p>
+        </div>
+
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+
+    <div class="quick-links">
+        <a href="patient.html" class="quick-btn"><i class="fas fa-user-plus"></i> Add Patient</a>
+        <a href="doctor.html" class="quick-btn"><i class="fas fa-user-md"></i> Add Doctor</a>
+        <a href="appointment.html" class="quick-btn"><i class="fas fa-calendar-plus"></i> Book Appointment</a>
+        <a href="records.html" class="quick-btn"><i class="fas fa-file-medical"></i> Medical Records</a>
+    </div>
+</div>
+```
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Smart Healthcare Management System</p>
+    <p>Accessible Healthcare for Rural & Underserved Communities</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

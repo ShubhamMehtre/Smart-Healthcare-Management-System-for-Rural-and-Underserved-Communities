@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Healthcare Management System</title>
+
+    <!-- Flask CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            background:#f4f9fc;
+            color:#333;
+        }
+
+        /* Header */
+        .main-header{
+            background:linear-gradient(135deg,#0f6ba8,#1ca7a3);
+            color:white;
+            text-align:center;
+            padding:30px;
+        }
+
+        .main-header h1{
+            font-size:38px;
+        }
+
+        .main-header p{
+            margin-top:10px;
+            font-size:18px;
+        }
+
+        /* Navbar */
+        .navbar{
+            display:flex;
+            justify-content:center;
+            flex-wrap:wrap;
+            gap:12px;
+            background:white;
+            padding:15px;
+            box-shadow:0 2px 8px rgba(0,0,0,.08);
+        }
+
+        .navbar a{
+            text-decoration:none;
+            color:#0f6ba8;
+            font-weight:bold;
+            padding:10px 18px;
+            border-radius:25px;
+            transition:.3s;
+        }
+
+        .navbar a:hover{
+            background:#0f6ba8;
+            color:white;
+        }
+
+        /* Hero Section */
+        .hero-section{
+            text-align:center;
+            padding:70px 20px;
+            background:linear-gradient(135deg,#eaf7ff,#f5ffff);
+        }
+
+        .hero-content h2{
+            font-size:42px;
+            color:#0f6ba8;
+            margin-bottom:20px;
+        }
+
+        .hero-content p{
+            max-width:750px;
+            margin:auto;
+            font-size:18px;
+            line-height:1.6;
+            color:#555;
+        }
+
+        .hero-buttons{
+            margin-top:30px;
+        }
+
+        .btn-primary,.btn-secondary{
+            display:inline-block;
+            padding:14px 28px;
+            margin:10px;
+            border-radius:30px;
+            text-decoration:none;
+            font-weight:bold;
+            transition:.3s;
+        }
+
+        .btn-primary{
+            background:#0f6ba8;
+            color:white;
+        }
+
+        .btn-secondary{
+            background:#1ca7a3;
+            color:white;
+        }
+
+        .btn-primary:hover,.btn-secondary:hover{
+            transform:translateY(-3px);
+        }
+
+        /* Services */
+        .features{
+            padding:60px 20px;
+            text-align:center;
+        }
+
+        .features h2{
+            color:#0f6ba8;
+            margin-bottom:35px;
+            font-size:34px;
+        }
+
+        .feature-grid{
+            max-width:1200px;
+            margin:auto;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:22px;
+        }
+
+        .feature-card{
+            background:white;
+            padding:25px;
+            border-radius:18px;
+            text-decoration:none;
+            color:#333;
+            box-shadow:0 10px 20px rgba(0,0,0,.08);
+            transition:.3s;
+        }
+
+        .feature-card:hover{
+            background:#0f6ba8;
+            color:white;
+            transform:translateY(-6px);
+        }
+
+        .feature-card i{
+            font-size:40px;
+            margin-bottom:15px;
+            color:#0f6ba8;
+        }
+
+        .feature-card:hover i{
+            color:white;
+        }
+
+        .feature-card h3{
+            margin-bottom:10px;
+        }
+
+        .feature-card p{
+            font-size:14px;
+        }
+
+        /* Latest Appointments */
+        .appointments-home{
+            background:white;
+            padding:50px 20px;
+            text-align:center;
+        }
+
+        .appointments-home h2{
+            color:#0f6ba8;
+            margin-bottom:20px;
+        }
+
+        #homeAppointments{
+            max-width:700px;
+            margin:auto;
+            padding:20px;
+            background:#eef7ff;
+            border-radius:12px;
+        }
+
+        /* Statistics */
+        .stats-section{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+            padding:60px 20px;
+            background:#eef8ff;
+        }
+
+        .stat-box{
+            background:white;
+            text-align:center;
+            padding:25px;
+            border-radius:15px;
+            box-shadow:0 8px 15px rgba(0,0,0,.08);
+        }
+
+        .stat-box h3{
+            font-size:38px;
+            color:#0f6ba8;
+        }
+
+        /* Emergency */
+        .emergency-section{
+            text-align:center;
+            padding:60px 20px;
+            background:#dff8f7;
+        }
+
+        .emergency-section h2{
+            color:#d62828;
+            margin-bottom:15px;
+        }
+
+        .emergency-section p{
+            margin-bottom:20px;
+            font-size:18px;
+        }
+
+        /* Footer */
+        .main-footer{
+            background:#0f172a;
+            color:white;
+            text-align:center;
+            padding:25px;
+        }
+
+        @media(max-width:768px){
+            .hero-content h2{
+                font-size:30px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<!-- Header -->
+<header class="main-header">
+    <h1><i class="fas fa-hospital"></i> Smart Healthcare</h1>
+    <p>Healthcare Management System for Rural & Underserved Communities</p>
+</header>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <a href="/">🏠 Home</a>
+    <a href="/patient">👤 Patients</a>
+    <a href="/doctor">🩺 Doctors</a>
+    <a href="/appointment">📅 Appointments</a>
+    <a href="/records">📋 Medical Records</a>
+    <a href="/dashboard">📊 Dashboard</a>
+    <a href="/receipt">🧾 Receipt</a>
+    <a href="/prediction">🧠 Prediction</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h2>Accessible Healthcare for Every Village</h2>
+
+        <p>
+            A modern healthcare platform to register patients, manage doctors,
+            schedule appointments, maintain medical records, predict health risks,
+            and generate receipts digitally.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="/patient" class="btn-primary">Register Patient</a>
+            <a href="/appointment" class="btn-secondary">Book Appointment</a>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="features">
+
+    <h2>Our Healthcare Services</h2>
+
+    <div class="feature-grid">
+
+        <a href="/patient" class="feature-card">
+            <i class="fas fa-user-plus"></i>
+            <h3>Patient Registration</h3>
+            <p>Register new patients and maintain their healthcare information.</p>
+        </a>
+
+        <a href="/doctor" class="feature-card">
+            <i class="fas fa-user-md"></i>
+            <h3>Doctor Registration</h3>
+            <p>Add qualified doctors and manage their specializations.</p>
+        </a>
+
+        <a href="/appointment" class="feature-card">
+            <i class="fas fa-calendar-check"></i>
+            <h3>Book Appointment</h3>
+            <p>Schedule appointments quickly with available doctors.</p>
+        </a>
+
+        <a href="/records" class="feature-card">
+            <i class="fas fa-file-medical"></i>
+            <h3>Medical Records</h3>
+            <p>Maintain diagnosis, prescriptions and follow-up records.</p>
+        </a>
+
+        <a href="/prediction" class="feature-card">
+            <i class="fas fa-heartbeat"></i>
+            <h3>Health Prediction</h3>
+            <p>Predict patient health risk using symptoms and vital signs.</p>
+        </a>
+
+        <a href="/dashboard" class="feature-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Dashboard</h3>
+            <p>View total patients, doctors, appointments and records.</p>
+        </a>
+
+        <a href="/receipt" class="feature-card">
+            <i class="fas fa-receipt"></i>
+            <h3>Receipt Generator</h3>
+            <p>Generate appointment receipts for patients.</p>
+        </a>
+
+    </div>
+
+</section>
+
+<!-- Latest Appointments -->
+<section class="appointments-home">
+
+    <h2><i class="fas fa-calendar-day"></i> Latest Appointments</h2>
+
+    <div id="homeAppointments">
+        <p>Visit the Appointment page to view scheduled appointments.</p>
+    </div>
+
+</section>
+
+<!-- Statistics -->
+<section class="stats-section">
+
+    <div class="stat-box">
+        <h3>100+</h3>
+        <p>Patients Registered</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>20+</h3>
+        <p>Doctors Available</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>150+</h3>
+        <p>Appointments Completed</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>95%</h3>
+        <p>Patient Satisfaction</p>
+    </div>
+
+</section>
+ <!-- Health Prediction (NEW FEATURE) -->
+        <a href="/prediction" class="feature-card">
+            <i class="fas fa-heartbeat"></i>
+            <h3>Health Prediction</h3>
+            <p>Predict disease risk using symptoms, temperature and blood pressure.</p>
+        </a>
+
+<!-- Emergency -->
+<section class="emergency-section">
+
+    <h2><i class="fas fa-ambulance"></i> Emergency Healthcare Support</h2>
+
+    <p>
+        Need urgent medical assistance?
+        Dial <strong>108</strong> for ambulance services available 24×7.
+    </p>
+
+    <a href="/appointment" class="btn-primary">Emergency Appointment</a>
+
+</section>
+
+<!-- Footer -->
+<footer class="main-footer">
+    <p>&copy; 2026 Smart Healthcare Management System</p>
+    <p>Designed for Rural and Underserved Communities</p>
+</footer>
+
+</body>
+</html>
